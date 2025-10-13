@@ -46,7 +46,7 @@ const Index = () => {
         <div className="relative container mx-auto px-4 py-20 md:py-32">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h1 className="text-5xl md:text-7xl font-bold">
-              Welcome to <span className="gradient-text">BeatChain</span>
+              Welcome to <span className="gradient-text">JAMS</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground">
               Stream music. Support artists. Own the vibe.
@@ -133,7 +133,7 @@ const Index = () => {
         <div className="glass-card rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto glow-hover">
           <div className="max-w-2xl mx-auto space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold gradient-text">
-              Join the BeatChain Revolution
+              Join the JAMS Revolution
             </h2>
             <p className="text-lg text-muted-foreground">
               Mint your BeatPass NFT to unlock exclusive drops, early access, and governance rights in the Black Circle ecosystem.

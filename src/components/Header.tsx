@@ -13,7 +13,7 @@ export const Header = () => {
               <Music2 className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold gradient-text">BeatChain</h1>
+              <h1 className="text-xl font-bold gradient-text">JAMS</h1>
               <p className="text-xs text-muted-foreground">Black Circle</p>
             </div>
           </div>
