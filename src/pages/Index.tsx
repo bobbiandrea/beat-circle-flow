@@ -1,30 +1,47 @@
 import { Header } from "@/components/Header";
 import { SongCard } from "@/components/SongCard";
 import { MusicPlayer } from "@/components/MusicPlayer";
+import { YoutubePlayer } from "@/components/YoutubePlayer";
 import { Sparkles, Zap, Shield } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import heroBg from "@/assets/hero-bg.jpg";
 import album1 from "@/assets/album-1.jpg";
 import album2 from "@/assets/album-2.jpg";
 import album3 from "@/assets/album-3.jpg";
 import album4 from "@/assets/album-4.jpg";
+import { getRandomSongs, YoutubeSong } from "@/utils/youtubeSongs";
 
 const Index = () => {
-  const [currentSong, setCurrentSong] = useState<any>(null);
+  const [currentSong, setCurrentSong] = useState<YoutubeSong | null>(null);
+  const [songs, setSongs] = useState<YoutubeSong[]>([]);
+  const [activeYoutubePlayer, setActiveYoutubePlayer] = useState<YoutubeSong | null>(null);
 
-  // Mock song data
-  const songs = [
-    { id: 1, title: "Neon Dreams", artist: "Cyber Beats", coverUrl: album1, duration: "3:45" },
-    { id: 2, title: "Digital Horizon", artist: "Wave Pulse", coverUrl: album2, duration: "4:12" },
-    { id: 3, title: "Bass Revolution", artist: "Chain Gang", coverUrl: album3, duration: "3:28" },
-    { id: 4, title: "Synth Paradise", artist: "Future Sound", coverUrl: album4, duration: "5:01" },
-    { id: 5, title: "Block Rhythm", artist: "Crypto Vibes", coverUrl: album1, duration: "3:55" },
-    { id: 6, title: "Chain Reaction", artist: "Beat Miners", coverUrl: album2, duration: "4:33" },
-  ];
+  // Album covers for visual variety
+  const albumCovers = [album1, album2, album3, album4];
 
-  const handlePlay = (song: any) => {
+  // Load random songs on component mount
+  useEffect(() => {
+    const randomSongs = getRandomSongs(12);
+    // Assign random album covers to songs
+    const songsWithCovers = randomSongs.map((song, index) => ({
+      ...song,
+      coverUrl: albumCovers[index % albumCovers.length]
+    }));
+    setSongs(songsWithCovers);
+    
+    toast.success("🎵 Loaded random songs from YouTube!");
+  }, []);
+
+  const handlePlay = (song: YoutubeSong) => {
     setCurrentSong(song);
+    setActiveYoutubePlayer(song);
+    toast.success(`Now playing: ${song.title} by ${song.artist}`);
+  };
+
+  const handleClosePlayer = () => {
+    setActiveYoutubePlayer(null);
   };
 
   return (
@@ -151,6 +168,16 @@ const Index = () => {
 
       {/* Music Player */}
       <MusicPlayer currentSong={currentSong} />
+
+      {/* YouTube Player */}
+      {activeYoutubePlayer && (
+        <YoutubePlayer
+          videoId={activeYoutubePlayer.youtubeId}
+          title={activeYoutubePlayer.title}
+          artist={activeYoutubePlayer.artist}
+          onClose={handleClosePlayer}
+        />
+      )}
     </div>
   );
 };
