@@ -14,16 +14,236 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      artists: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          id: string
+          is_spotlighted: boolean | null
+          name: string
+          platform: string | null
+          platform_id: string | null
+          spotlight_end: string | null
+          spotlight_start: string | null
+          total_listeners: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          is_spotlighted?: boolean | null
+          name: string
+          platform?: string | null
+          platform_id?: string | null
+          spotlight_end?: string | null
+          spotlight_start?: string | null
+          total_listeners?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          is_spotlighted?: boolean | null
+          name?: string
+          platform?: string | null
+          platform_id?: string | null
+          spotlight_end?: string | null
+          spotlight_start?: string | null
+          total_listeners?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      listening_sessions: {
+        Row: {
+          artist_name: string | null
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          platform: string | null
+          song_title: string
+          started_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          artist_name?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          platform?: string | null
+          song_title: string
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          artist_name?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          platform?: string | null
+          song_title?: string
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listening_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mint_passes: {
+        Row: {
+          contract_address: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          minted_at: string | null
+          tier: Database["public"]["Enums"]["subscription_tier"] | null
+          token_id: string
+          user_id: string | null
+        }
+        Insert: {
+          contract_address: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          minted_at?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"] | null
+          token_id: string
+          user_id?: string | null
+        }
+        Update: {
+          contract_address?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          minted_at?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"] | null
+          token_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mint_passes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          artist_id: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          link_url: string | null
+          message: string | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string | null
+        }
+        Insert: {
+          artist_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          link_url?: string | null
+          message?: string | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id?: string | null
+        }
+        Update: {
+          artist_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          link_url?: string | null
+          message?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["notification_type"]
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          listening_streak: number | null
+          subscription_tier:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
+          total_listening_time: number | null
+          updated_at: string | null
+          username: string | null
+          wallet_address: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          listening_streak?: number | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
+          total_listening_time?: number | null
+          updated_at?: string | null
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listening_streak?: number | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
+          total_listening_time?: number | null
+          updated_at?: string | null
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      auto_spotlight_artists: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      notification_type: "update" | "new_artist" | "new_music" | "link"
+      subscription_tier: "free" | "premium"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +370,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      notification_type: ["update", "new_artist", "new_music", "link"],
+      subscription_tier: ["free", "premium"],
+    },
   },
 } as const
