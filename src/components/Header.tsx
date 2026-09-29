@@ -1,12 +1,15 @@
 import { Music2, Search } from "lucide-react";
 import { WalletConnect } from "./WalletConnect";
+import { NotificationsBell } from "./NotificationsBell";
+import { StreakBadge } from "./StreakBadge";
 import { Input } from "./ui/input";
+import { Profile } from "@/hooks/useProfile";
 
-export const Header = () => {
+export const Header = ({ profile }: { profile?: Profile | null }) => {
   return (
     <header className="sticky top-0 z-40 glass-card border-b border-primary/20">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-3">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
@@ -19,18 +22,22 @@ export const Header = () => {
           </div>
 
           {/* Search - Hidden on mobile */}
-          <div className="hidden md:flex items-center flex-1 max-w-md">
+          <div className="hidden lg:flex items-center flex-1 max-w-md">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search songs, artists..." 
+              <Input
+                placeholder="Search songs, artists..."
                 className="pl-10 bg-muted/50 border-primary/20"
               />
             </div>
           </div>
 
-          {/* Wallet Connect */}
-          <WalletConnect />
+          {/* Streak, updates and wallet */}
+          <div className="flex items-center gap-2">
+            <StreakBadge profile={profile ?? null} />
+            <NotificationsBell />
+            <WalletConnect />
+          </div>
         </div>
       </div>
     </header>
