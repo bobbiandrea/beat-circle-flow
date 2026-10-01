@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { SongCard } from "@/components/SongCard";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { YoutubePlayer } from "@/components/YoutubePlayer";
+import { SpotlightArtists } from "@/components/SpotlightArtists";
 import { Sparkles, Zap, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,15 @@ import album2 from "@/assets/album-2.jpg";
 import album3 from "@/assets/album-3.jpg";
 import album4 from "@/assets/album-4.jpg";
 import { getRandomSongs, YoutubeSong } from "@/utils/youtubeSongs";
+import { useProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
   const [currentSong, setCurrentSong] = useState<YoutubeSong | null>(null);
   const [songs, setSongs] = useState<YoutubeSong[]>([]);
   const [activeYoutubePlayer, setActiveYoutubePlayer] = useState<YoutubeSong | null>(null);
+  const { user } = useAuth();
+  const { profile, recordPlay } = useProfile();
 
   // Album covers for visual variety
   const albumCovers = [album1, album2, album3, album4];
@@ -24,20 +29,23 @@ const Index = () => {
   // Load random songs on component mount
   useEffect(() => {
     const randomSongs = getRandomSongs(12);
-    // Assign random album covers to songs
     const songsWithCovers = randomSongs.map((song, index) => ({
       ...song,
       coverUrl: albumCovers[index % albumCovers.length]
     }));
     setSongs(songsWithCovers);
-    
-    toast.success("🎵 Loaded random songs from YouTube!");
   }, []);
 
-  const handlePlay = (song: YoutubeSong) => {
+  const handlePlay = async (song: YoutubeSong) => {
     setCurrentSong(song);
     setActiveYoutubePlayer(song);
     toast.success(`Now playing: ${song.title} by ${song.artist}`);
+
+    // Save the play to the listener's history and grow their streak
+    if (user) {
+      const result = await recordPlay({ title: song.title, artist: song.artist, platform: "youtube" });
+      if (result?.grew) toast.success(`🔥 ${result.streak}-day listening streak!`);
+    }
   };
 
   const handleClosePlayer = () => {
@@ -46,7 +54,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen pb-32">
-      <Header />
+      <Header profile={profile} />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -144,6 +152,9 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Artist Spotlight */}
+      <SpotlightArtists />
 
       {/* BeatPass CTA */}
       <section className="container mx-auto px-4 py-16">
