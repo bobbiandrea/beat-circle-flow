@@ -153,6 +153,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Artist Spotlight */}
+      <SpotlightArtists />
+
       {/* BeatPass CTA */}
       <section className="container mx-auto px-4 py-16">
         <div className="glass-card rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto glow-hover">
